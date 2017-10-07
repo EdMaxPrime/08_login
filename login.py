@@ -6,15 +6,21 @@ app.secret_key="THIS IS NOT SECURE"
 @app.route("/")
 def root():
     if 'Name' in session:
-        return  render_template("response.html", name=session['Name'], message="WELCOME!") ##User is already logged in, so shows Welcome page
+        redirect(url_for("welcome")) #logged in
     else:
-        return render_template("form.html") ##User is not logged in
+        return render_template("form.html") #not logged in
+
+@app.route("/welcome")
+def welcome():
+    if 'Name' in session:
+        return render_template("response.html", name = session['Name'])
+    else:
+        redirect(url_for("root"))
 
 @app.route("/response", methods=["POST","GET"])
 def response():
-    print request.method
-    print request.headers
-    print request.form
+    return request.method
+    """
     username=request.form["Name"]
     password=request.form["Password"]
     status=validate(username,password) ##Checks if username and password are correct
@@ -25,7 +31,7 @@ def response():
     elif status==1:
         return render_template("form.html",message="Wrong Password") #redirects to login page and shows message saying that password entered is wrong
     else:
-        return render_template("form.html",message="Wrong Username") #redirects to login page and shows message saying that username is wrong
+        return render_template("form.html",message="Wrong Username") #redirects to login page and shows message saying that username is wrong"""
     
 
 def validate(username, password):
