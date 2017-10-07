@@ -6,7 +6,7 @@ app.secret_key="THIS IS NOT SECURE"
 @app.route("/")
 def root():
     if 'Name' in session:
-        redirect(url_for("welcome")) #logged in
+        return redirect(url_for("welcome")) #logged in
     else:
         return render_template("form.html") #not logged in
 
@@ -15,7 +15,7 @@ def welcome():
     if 'Name' in session:
         return render_template("response.html", name = session['Name'])
     else:
-        redirect(url_for("root"))
+        return redirect(url_for("root"))
 
 @app.route("/response", methods=["POST","GET"])
 def response():
@@ -45,7 +45,7 @@ def validate(username, password):
 def logout():
     if 'Name' in session:
         session.pop('Name') #remove user who was just logged in from session
-    return render_template("logout.html") 
+    return redirect(url_for("root")) 
 
 if __name__=="__main__":
     app.debug=True
