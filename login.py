@@ -19,19 +19,20 @@ def welcome():
 
 @app.route("/response", methods=["POST","GET"])
 def response():
-    return request.method
-    """
-    username=request.form["Name"]
-    password=request.form["Password"]
-    status=validate(username,password) ##Checks if username and password are correct
+    username = request.form["Name"]
+    password = request.form["Password"]
+    status = validate(username,password) ##Checks if username and password are correct
+    #THIS SHOULD REDIRECT TO /WELCOME
     if status == 0:
         session['Name'] = username
         print "Session: "+session['Name']
         return render_template("response.html", name=username, message="WELCOME!") #username and password are correct, so shows Welcome page
+    #THIS SHOULD BE IN THE ROOT() ROUTE
     elif status==1:
         return render_template("form.html",message="Wrong Password") #redirects to login page and shows message saying that password entered is wrong
+    #THIS SHOULD ALSO BE IN THE ROOT() ROUTE
     else:
-        return render_template("form.html",message="Wrong Username") #redirects to login page and shows message saying that username is wrong"""
+        return render_template("form.html",message="Wrong Username") #redirects to login page and shows message saying that username is wrong
     
 
 def validate(username, password):
