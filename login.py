@@ -8,18 +8,22 @@ def root():
     if 'Name' in session:
         return redirect(url_for("welcome")) #logged in
     elif request.method == "POST" and "Name" in request.form:
+        # Trying to login
         username = request.form["Name"]
         password = request.form["Password"]
-        status = validate(username, password)
+        status = validate(username, password) #is this combo good?
+        # correct username and password
         if status == 0:
             session["Name"] = username
             return redirect(url_for("welcome"))
+        # wrong password, try again
         elif status == 1:
             return render_template("form.html", message="Wrong Password")
+        # wrong username, try again
         else:
             return render_template("form.html", message="Wrong Username")
     else:
-        return render_template("form.html") #not logged in
+        return render_template("form.html") # not logged in
 
 @app.route("/welcome")
 def welcome():
@@ -27,22 +31,6 @@ def welcome():
         return render_template("response.html", name = session['Name'])
     else:
         return redirect(url_for("root"))
-
-@app.route("/response", methods=["POST","GET"])
-def response():
-    username = request.form["Name"]
-    password = request.form["Password"]
-    status = validate(username,password) ##Checks if username and password are correct
-    if status == 0:
-        session['Name'] = username
-        print "Session: "+session['Name']
-        return redirect(url_for("welcome")) #username and password are correct, so shows Welcome page
-    #THIS SHOULD BE IN THE ROOT() ROUTE
-    elif status==1:
-        return render_template("form.html",message="Wrong Password") #redirects to login page and shows message saying that password entered is wrong
-    #THIS SHOULD ALSO BE IN THE ROOT() ROUTE
-    else:
-        return render_template("form.html",message="Wrong Username") #redirects to login page and shows message saying that username is wrong
     
 
 def validate(username, password):
