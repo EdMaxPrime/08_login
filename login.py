@@ -7,7 +7,8 @@ app.secret_key="THIS IS NOT SECURE"
 def root():
     if 'Name' in session:
         return redirect(url_for("welcome")) #logged in
-    elif request.method == "POST" and "Name" in request.form: #if user enters username in the form, check if username and password are valid
+    elif request.method == "POST" and request.form["Name"]!= "" and request.form["Password"]!="": #if user clicks submit and enters both the username and password, check if username and password are valid
+        print request.form
         # Trying to login
         username = request.form["Name"]
         password = request.form["Password"]
@@ -22,6 +23,10 @@ def root():
         # wrong username, try again
         else:
             return render_template("form.html", message="Wrong Username")
+    elif request.method == "POST" and request.form["Name"]=="" and request.form["Password"]!="": #if username is not entered, print error message
+        return render_template("form.html",message="Username not entered")
+    elif request.method == "POST" and request.form["Password"]=="" and request.form["Name"]!="": #if password is not entered, print error message
+        return render_template("form.html",message="Password not entered")
     else:
         return render_template("form.html") # not logged in
 
