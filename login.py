@@ -3,10 +3,21 @@ from flask import Flask, render_template, request, session, redirect, url_for
 app=Flask(__name__)
 app.secret_key="THIS IS NOT SECURE"
 
-@app.route("/")
+@app.route("/", methods = ["POST", "GET"])
 def root():
     if 'Name' in session:
         return redirect(url_for("welcome")) #logged in
+    elif request.method == "POST" and "Name" in request.form:
+        username = request.form["Name"]
+        password = request.form["Password"]
+        status = validate(username, password)
+        if status == 0:
+            session["Name"] = username
+            return redirect(url_for("welcome"))
+        elif status == 1:
+            return render_template("form.html", message="Wrong Password")
+        else:
+            return render_template("form.html", message="Wrong Username")
     else:
         return render_template("form.html") #not logged in
 
@@ -22,11 +33,10 @@ def response():
     username = request.form["Name"]
     password = request.form["Password"]
     status = validate(username,password) ##Checks if username and password are correct
-    #THIS SHOULD REDIRECT TO /WELCOME
     if status == 0:
         session['Name'] = username
         print "Session: "+session['Name']
-        return render_template("response.html", name=username, message="WELCOME!") #username and password are correct, so shows Welcome page
+        return redirect(url_for("welcome")) #username and password are correct, so shows Welcome page
     #THIS SHOULD BE IN THE ROOT() ROUTE
     elif status==1:
         return render_template("form.html",message="Wrong Password") #redirects to login page and shows message saying that password entered is wrong
