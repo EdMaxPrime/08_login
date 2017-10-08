@@ -7,15 +7,15 @@ app.secret_key="THIS IS NOT SECURE"
 def root():
     if 'Name' in session:
         return redirect(url_for("welcome")) #logged in
-    elif request.method == "POST" and "Name" in request.form:
+    elif request.method == "POST" and "Name" in request.form: #if user enters username in the form, check if username and password are valid
         # Trying to login
         username = request.form["Name"]
         password = request.form["Password"]
-        status = validate(username, password) #is this combo good?
+        status = validate(username, password) #checking: is this combo good?
         # correct username and password
         if status == 0:
             session["Name"] = username
-            return redirect(url_for("welcome"))
+            return redirect(url_for("welcome")) #goes to welcome function
         # wrong password, try again
         elif status == 1:
             return render_template("form.html", message="Wrong Password")
@@ -44,7 +44,7 @@ def validate(username, password):
 def logout():
     if 'Name' in session:
         session.pop('Name') #remove user who was just logged in from session
-    return redirect(url_for("root")) 
+    return redirect(url_for("root")) #goes back to root function
 
 if __name__=="__main__":
     app.debug=True
