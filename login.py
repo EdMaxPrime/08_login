@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, flash
 
 app=Flask(__name__)
 app.secret_key="THIS IS NOT SECURE"
@@ -19,16 +19,15 @@ def root():
             return redirect(url_for("welcome")) #goes to welcome function
         # wrong password, try again
         elif status == 1:
-            return render_template("form.html", message="Wrong Password")
+            flash("Wrong Password")
         # wrong username, try again
         else:
-            return render_template("form.html", message="Wrong Username")
+            flash("Wrong Username")
     elif request.method == "POST" and request.form["Name"]=="" and request.form["Password"]!="": #if username is not entered, print error message
-        return render_template("form.html",message="Username not entered")
+        flash("Username not entered")
     elif request.method == "POST" and request.form["Password"]=="" and request.form["Name"]!="": #if password is not entered, print error message
-        return render_template("form.html",message="Password not entered")
-    else:
-        return render_template("form.html") # not logged in
+        flash("Password not entered")
+    return render_template("form.html") 
 
 @app.route("/welcome")
 def welcome():
