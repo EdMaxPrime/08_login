@@ -47,6 +47,7 @@ def validate(username, password):
 @app.route("/logout", methods=["POST","GET"])
 def logout():
     if 'Name' in session:
+        flash(session["Name"] + " successfully logged out")
         session.pop('Name') #remove user who was just logged in from session
     return redirect(url_for("root")) #goes back to root function
 
