@@ -4,7 +4,10 @@
     <title>Form</title>
   </head>
   <body>
+    {% set messages=get_flashed_messages() %}
+    {% for message in messages %}
     <h3 style="color: red;">{{message}}</h3> <!--shows error message if incorrect username/password entered-->
+    {% endfor %}
     <h1>Login</h1>
     <form method="POST" action="/">
       Username: <input type="text" name="Name"><br>
